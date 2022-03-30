@@ -6,30 +6,44 @@ var cityNameBtnEl = document.querySelector("#city-name-btn")
 var currentStatsEl = document.querySelector("#current-day")
 
 
-    //API call function for searching by City Name
+    //1st API call Searching the cities longitude and latitude stats
 var getWeatherInfo = function(cityName){fetch("https://api.openweathermap.org/data/2.5/weather?q="+cityName+"&units=metric&cnt=7&appid="+apiKey)
-
     .then(function(response){
         response.json().then(function(data){
-            //console.log(data);
 
-            console.log("longitude: " + data.coord.lon);
+                // create title for the current day stats
+            var cityTitle = document.createElement("h2");
+            cityTitle.innerText = data.name + ", " + data.sys.country;
+            currentStatsEl.appendChild(cityTitle);
+                //capture the longitude and latitude of the city and send them as parameters
             var longitude = data.coord.lon;
-            console.log("latitude: " + data.coord.lat);
             var latitude = data.coord.lat;
-
             getDailyWeather(latitude, longitude)
         });//end of inner.then
     });//end of .then
 };
 
-
-    // API call for daily weather
+    // 2nd API call: for daily weather
 var getDailyWeather = function(lat, lon){
     fetch("https://api.openweathermap.org/data/2.5/onecall?lat="+ lat +"&lon="+ lon +"&exclude=hourly,minutely&units=metric&appid="+apiKey)
    .then(function(response){
        response.json().then(function(data){
            console.log(data);
+
+                // create the HTML elements for the current day stats
+            var cityTemp = document.createElement("p");
+            cityTemp.innerHTML = "<span class='alert-dark'>Temprature:</span>"+" "+ data.daily[0].temp.day +"°C";
+
+            var cityWind = document.createElement("p");
+            cityWind.innerHTML = "<span class='alert-dark'>Wind Speed:</span>"+" "+ data.daily[0].wind_speed +" Km/h";
+
+            var cityHumid = document.createElement("p");
+            cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span>"+" "+ data.daily[0].humidity +"%";
+
+            var cityUvi = document.createElement("p");
+            cityUvi.innerHTML = "<span class='alert-dark'>UVI Index:</span>"+" "+ data.daily[0].uvi;
+            currentStatsEl.append(cityTemp, cityWind, cityHumid, cityUvi);
+
        });//end of inner.then
    });//end of .then
 };
