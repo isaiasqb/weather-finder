@@ -8,29 +8,29 @@ var currentStatsEl = document.querySelector("#current-day")
 var containerDaysEl = document.querySelector(".future-days");
 
     //CREATE the date
-var today = new Date()
-var day = today.getDate()
-var month = today.getMonth()+1
-var year = today.getFullYear()
-
+var now = luxon.DateTime.now().toFormat("yyyy LLL dd")
 
 
 
     //1st API call Searching the cities longitude and latitude stats
 var getWeatherInfo = function(cityName){fetch("https://api.openweathermap.org/data/2.5/weather?q="+cityName+"&units=metric&cnt=5&appid="+apiKey)
     .then(function(response){
-        response.json().then(function(data){
+        if(response.ok){
+            response.json().then(function(data){
 
-                // create title for the current day stats
-            var cityTitle = document.createElement("h2");
-            cityTitle.innerText = data.name + ", " + data.sys.country;
-            currentStatsEl.appendChild(cityTitle);
+                    // create title for the current day stats
+                var cityTitle = document.createElement("h2");
+                cityTitle.innerText = data.name + ", " + data.sys.country;
+                currentStatsEl.appendChild(cityTitle);
 
-                //capture the longitude and latitude of the city and send them as parameters
-            var longitude = data.coord.lon;
-            var latitude = data.coord.lat;
-            getDailyWeather(latitude, longitude)
-        });//end of inner.then
+                    //capture the longitude and latitude of the city and send them as parameters
+                var longitude = data.coord.lon;
+                var latitude = data.coord.lat;
+                getDailyWeather(latitude, longitude)
+            });//end of inner.then
+        } else {
+            alert("City name not found, please try again")
+        }
     });//end of .then
 };
 
@@ -44,7 +44,7 @@ var getDailyWeather = function(lat, lon){
                 // create the HTML elements for the current day stats
             var cityDate = document.createElement("p");
             cityDate.className = "badge bg-dark";
-            cityDate.innerText = today;
+            cityDate.innerText = now;
             var cityTemp = document.createElement("p");
             cityTemp.innerHTML = "<span class='alert-dark'>Temprature:</span>"+" "+ data.daily[0].temp.day +"°C";
             var cityWind = document.createElement("p");
@@ -57,9 +57,15 @@ var getDailyWeather = function(lat, lon){
 
                 // dynamically generate 5 day forecast
             for (var i = 1; i < 6; i++) {
+                // dynamic date
+                var dyDate = luxon.DateTime.now().plus({ days: i }).toFormat("dd LLL yyyy");
+                    
                     //card element
                 var dayCard = document.createElement("div")
                     //5 coming days
+                var cityDate = document.createElement("p");
+                cityDate.className = "badge bg-dark";
+                cityDate.innerText = dyDate;
                 var cityTemp = document.createElement("p");
                 cityTemp.innerHTML = "<span class='alert-dark'>Temprature:</span>"+" "+ data.daily[i].temp.day +"°C";
                 var cityWind = document.createElement("p");
@@ -68,7 +74,7 @@ var getDailyWeather = function(lat, lon){
                 cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span>"+" "+ data.daily[i].humidity +"%";
                 var cityUvi = document.createElement("p");
                 cityUvi.innerHTML = "<span class='alert-dark'>UVI Index:</span>"+" "+ data.daily[i].uvi;
-                dayCard.append(cityTemp, cityWind, cityHumid, cityUvi);
+                dayCard.append(cityDate, cityTemp, cityWind, cityHumid, cityUvi);
 
                     //append all to the document
                 containerDaysEl.append(dayCard);
@@ -91,6 +97,9 @@ var cityNameSubmit = function(event) {
         console.log("searching for the weather in: "+ cityName)
         getWeatherInfo(cityName)
         cityNameEl.value = "";
+        
+        //call function to save storage
+
     } else {        //if no name, please enter a name
         alert("Please enter the name of a City");
     }
@@ -99,7 +108,6 @@ var cityNameSubmit = function(event) {
 
     //SUBMIT form with user input
 cityFormEl.addEventListener("submit", cityNameSubmit);
-
 
 
 
