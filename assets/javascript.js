@@ -6,7 +6,8 @@ var cityNameBtnEl = document.querySelector("#city-name-btn")
 
 
  //API call function
-var getWeatherInfo = function(){fetch("https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid="+apiKey)
+var getWeatherInfo = function(cityName){fetch("https://api.openweathermap.org/data/2.5/weather?q="+cityName+"&appid="+apiKey)
+
     .then(function(response){
         response.json().then(function(data){
             console.log(data);
@@ -19,6 +20,17 @@ var getWeatherInfo = function(){fetch("https://api.openweathermap.org/data/2.5/o
 var cityNameSubmit = function(event) {
     event.preventDefault();
     console.log(event);
+        //get the name of the city from the input of the user
+    var cityName = cityNameEl.value.trim()
+
+        //if there is a name make the API call
+    if(cityName){
+        console.log("searching for the weather in: "+ cityName)
+        getWeatherInfo(cityName)
+        cityNameEl.value = "";
+    } else {        //if no name, please enter a name
+        alert("Please enter the name of a City");
+    }
 }
 
 
@@ -26,5 +38,4 @@ var cityNameSubmit = function(event) {
 cityFormEl.addEventListener("submit", cityNameSubmit);
 
 
-getWeatherInfo()
 
