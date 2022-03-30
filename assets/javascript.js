@@ -17,11 +17,14 @@ var getWeatherInfo = function(cityName){fetch("https://api.openweathermap.org/da
     .then(function(response){
         if(response.ok){
             response.json().then(function(data){
+                currentStatsEl.innerHTML = ""
+                containerDaysEl.innerHTML = ""
 
                     // create title for the current day stats
                 var cityTitle = document.createElement("h2");
                 cityTitle.innerText = data.name + ", " + data.sys.country;
                 currentStatsEl.appendChild(cityTitle);
+                saveCity(data.name); // save the name of the city to create a button
 
                     //capture the longitude and latitude of the city and send them as parameters
                 var longitude = data.coord.lon;
@@ -30,6 +33,9 @@ var getWeatherInfo = function(cityName){fetch("https://api.openweathermap.org/da
             });//end of inner.then
         } else {
             alert("City name not found, please try again")
+
+            currentStatsEl.innerHTML = ""
+            containerDaysEl.innerHTML = ""
         }
     });//end of .then
 };
@@ -111,3 +117,12 @@ cityFormEl.addEventListener("submit", cityNameSubmit);
 
 
 
+var saveCity = function(name){
+    console.log('save city function: '+ name)
+    var recentCities = [];
+
+    // push the name of the searched city inside the string
+    recentCities.push(name)
+
+    console.log("recentCities: "+recentCities)
+}
