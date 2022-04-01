@@ -59,9 +59,26 @@ var getDailyWeather = function(lat, lon){
             cityWind.innerHTML = "<span class='alert-dark'>Wind Speed:</span>"+" "+ data.daily[0].wind_speed +" Km/h";
             var cityHumid = document.createElement("p");
             cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span>"+" "+ data.daily[0].humidity +"%";
-            var cityUvi = document.createElement("p");
-            cityUvi.innerHTML = "<span class='alert-dark'>UVI Index:</span>"+" "+ data.daily[0].uvi;
+            var cityUvi = document.createElement("span");
+            cityUvi.innerHTML = "UVI Index: <tag id='uv-index'>"+data.daily[0].uvi;"+</tag>"
+            cityUvi.style.color = "white" 
             currentStatsEl.append(cityDate, cityTemp, cityWind, cityHumid, cityUvi);
+
+                //change color in UVI index
+            var uvIndexTagEl = document.querySelector("#uv-index");
+            var uvIndex = data.daily[0].uvi
+            if(uvIndex < 2.9){
+                cityUvi.style.backgroundColor = "green"
+            } else if (uvIndex >= 3 && uvIndex < 5.9){
+                cityUvi.style.backgroundColor = "yellow"
+            } else if (uvIndex >= 5 && uvIndex < 7.9){
+                cityUvi.style.backgroundColor = "orange"
+            } else if (uvIndex >= 8  && uvIndex < 10.9){
+                cityUvi.style.backgroundColor = "yellow"
+            } else {
+                cityUvi.style.backgroundColor = "purple"
+            }
+
 
                 // dynamically generate 5 day forecast
             for (var i = 1; i < 6; i++) {
@@ -80,10 +97,16 @@ var getDailyWeather = function(lat, lon){
                 cityWind.innerHTML = "<span class='alert-dark'>Wind Speed:</span>"+" "+ data.daily[i].wind_speed +" Km/h";
                 var cityHumid = document.createElement("p");
                 cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span>"+" "+ data.daily[i].humidity +"%";
-                var cityUvi = document.createElement("p");
-                cityUvi.innerHTML = "<span class='alert-dark'>UVI Index:</span>"+" "+ data.daily[i].uvi;
-                dayCard.append(cityDate, cityTemp, cityWind, cityHumid, cityUvi);
 
+                // display the weather coniditions and icon
+                var cityCondition = document.createElement("p");
+                cityCondition.innerText = data.daily[1].weather[0].description
+
+                var cityIcon = document.createElement("img")
+                cityIcon.setAttribute("src", "./assets/svg/animated/cloudy-day-1.svg")
+                
+                    //append to the container called card for each day
+                dayCard.append(cityDate, cityTemp, cityWind, cityHumid, cityCondition, cityIcon);
                     //append all to the document
                 containerDaysEl.append(dayCard);
             }//end of for loop
@@ -91,6 +114,8 @@ var getDailyWeather = function(lat, lon){
        });//end of inner.then
    });//end of .then
 };
+
+
 
 
     //SUBMIT form function
@@ -119,14 +144,26 @@ cityFormEl.addEventListener("submit", cityNameSubmit);
 var recentCities = [];
 
 var saveCity = function(name){
-    console.log('This functions creates a button for: '+ name)
-    
+    // console.log(recentCities)
+
+    //iterate through the recentCities 
+    // if a city matches a value don't run
+    // return
+    for (let i = 0; i < recentCities.length; i++) {
+        if (name === recentCities[i]){
+            return
+        }
+    }
+
     var cityButton = document.createElement("button");
     cityButton.className = "cityBtn bg-info d-block";
     cityButton.innerHTML = name;
+    cityButton.addEventListener("click", function (){
+        getWeatherInfo(name)
+    })
     containerHistoryEl.append(cityButton);
+ 
 
         // push the name of the searched city inside the string
     recentCities.push(name)
-    console.log("recentCities: "+recentCities)
 }
