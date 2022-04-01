@@ -7,6 +7,7 @@ var cityNameBtnEl = document.querySelector("#city-name-btn")
 var currentStatsEl = document.querySelector("#current-day")
 var containerDaysEl = document.querySelector(".future-days");
 var containerHistoryEl = document.querySelector(".history-container");
+var fiveDayTitleEl = document.querySelector("#five-day-title")
 
     //CREATE the date
 var now = luxon.DateTime.now().toFormat("yyyy LLL dd")
@@ -62,21 +63,27 @@ var getDailyWeather = function(lat, lon){
             var cityUvi = document.createElement("span");
             cityUvi.innerHTML = "UVI Index: <tag id='uv-index'>"+data.daily[0].uvi;"+</tag>"
             cityUvi.style.color = "white" 
-            currentStatsEl.append(cityDate, cityTemp, cityWind, cityHumid, cityUvi);
+
+                // display the weather ocnditions icon for the day
+            var cityConditionToday = data.daily[0].weather[0].main
+            var cityIconToday = document.createElement("img")
+            cityIconToday.setAttribute("src", "./assets/svg/animated/"+cityConditionToday+".svg")
+
+            currentStatsEl.append(cityDate, cityIconToday, cityTemp, cityWind, cityHumid, cityUvi);
 
                 //change color in UVI index
             var uvIndexTagEl = document.querySelector("#uv-index");
             var uvIndex = data.daily[0].uvi
             if(uvIndex < 2.9){
-                cityUvi.style.backgroundColor = "green"
+                cityUvi.style.backgroundColor = "#639045"
             } else if (uvIndex >= 3 && uvIndex < 5.9){
-                cityUvi.style.backgroundColor = "yellow"
+                cityUvi.style.backgroundColor = "#E09200"
             } else if (uvIndex >= 5 && uvIndex < 7.9){
-                cityUvi.style.backgroundColor = "orange"
+                cityUvi.style.backgroundColor = "#C66607"
             } else if (uvIndex >= 8  && uvIndex < 10.9){
-                cityUvi.style.backgroundColor = "yellow"
+                cityUvi.style.backgroundColor = "#AE2012"
             } else {
-                cityUvi.style.backgroundColor = "purple"
+                cityUvi.style.backgroundColor = "#57229C"
             }
 
 
@@ -98,15 +105,13 @@ var getDailyWeather = function(lat, lon){
                 var cityHumid = document.createElement("p");
                 cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span>"+" "+ data.daily[i].humidity +"%";
 
-                // display the weather coniditions and icon
-                var cityCondition = document.createElement("p");
-                cityCondition.innerText = data.daily[1].weather[0].description
-
+                    // display the weather coniditions and icon
+                var cityCondition = data.daily[i].weather[0].main
                 var cityIcon = document.createElement("img")
-                cityIcon.setAttribute("src", "./assets/svg/animated/cloudy-day-1.svg")
+                cityIcon.setAttribute("src", "./assets/svg/animated/"+cityCondition+".svg")
                 
                     //append to the container called card for each day
-                dayCard.append(cityDate, cityTemp, cityWind, cityHumid, cityCondition, cityIcon);
+                dayCard.append(cityDate, cityTemp, cityWind, cityHumid, cityIcon);
                     //append all to the document
                 containerDaysEl.append(dayCard);
             }//end of for loop
