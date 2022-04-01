@@ -6,10 +6,10 @@ var cityNameEl = document.querySelector("#city-name");
 var cityNameBtnEl = document.querySelector("#city-name-btn")
 var currentStatsEl = document.querySelector("#current-day")
 var containerDaysEl = document.querySelector(".future-days");
+var containerHistoryEl = document.querySelector(".history-container");
 
     //CREATE the date
 var now = luxon.DateTime.now().toFormat("yyyy LLL dd")
-
 
 
     //1st API call Searching the cities longitude and latitude stats
@@ -24,7 +24,9 @@ var getWeatherInfo = function(cityName){fetch("https://api.openweathermap.org/da
                 var cityTitle = document.createElement("h2");
                 cityTitle.innerText = data.name + ", " + data.sys.country;
                 currentStatsEl.appendChild(cityTitle);
-                saveCity(data.name); // save the name of the city to create a button
+
+                    // send the name of the city as parameter to create a button for search history
+                saveCity(data.name);
 
                     //capture the longitude and latitude of the city and send them as parameters
                 var longitude = data.coord.lon;
@@ -103,8 +105,6 @@ var cityNameSubmit = function(event) {
         console.log("searching for the weather in: "+ cityName)
         getWeatherInfo(cityName)
         cityNameEl.value = "";
-        
-        //call function to save storage
 
     } else {        //if no name, please enter a name
         alert("Please enter the name of a City");
@@ -116,13 +116,17 @@ var cityNameSubmit = function(event) {
 cityFormEl.addEventListener("submit", cityNameSubmit);
 
 
+var recentCities = [];
 
 var saveCity = function(name){
-    console.log('save city function: '+ name)
-    var recentCities = [];
+    console.log('This functions creates a button for: '+ name)
+    
+    var cityButton = document.createElement("button");
+    cityButton.className = "cityBtn bg-info d-block";
+    cityButton.innerHTML = name;
+    containerHistoryEl.append(cityButton);
 
-    // push the name of the searched city inside the string
+        // push the name of the searched city inside the string
     recentCities.push(name)
-
     console.log("recentCities: "+recentCities)
 }
