@@ -22,3 +22,13 @@ An example of the fully deployed application
 
 ![example of deployed application](./assets/mock-up.png)
 
+
+## Links
+
+* The URL of the functional, deployed application.
+
+https://isaiasqb.github.io/weather-finder/ 
+
+* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
+
+https://github.com/isaiasqb/weather-finder
