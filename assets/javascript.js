@@ -24,6 +24,7 @@ var getWeatherInfo = function(cityName){fetch("https://api.openweathermap.org/da
                     // create title for the current day stats
                 var cityTitle = document.createElement("h2");
                 cityTitle.innerText = data.name + ", " + data.sys.country;
+                currentStatsEl.setAttribute("class", "alert alert-warning")
                 currentStatsEl.appendChild(cityTitle);
 
                     // send the name of the city as parameter to create a button for search history
@@ -52,14 +53,14 @@ var getDailyWeather = function(lat, lon){
 
                 // create the HTML elements for the current day stats
             var cityDate = document.createElement("p");
-            cityDate.className = "badge bg-dark";
+            cityDate.className = "badge bg-dark fs-5";
             cityDate.innerText = now;
             var cityTemp = document.createElement("p");
-            cityTemp.innerHTML = "<span class='alert-dark'>Temprature:</span>"+" "+ data.daily[0].temp.day +"°C";
+            cityTemp.innerHTML = "<span class='alert-dark p-2'>Temprature:</span>"+" "+ data.daily[0].temp.day +"°C";
             var cityWind = document.createElement("p");
-            cityWind.innerHTML = "<span class='alert-dark'>Wind Speed:</span>"+" "+ data.daily[0].wind_speed +" Km/h";
+            cityWind.innerHTML = "<span class='alert-dark p-2'>Wind Speed:</span>"+" "+ data.daily[0].wind_speed +" Km/h";
             var cityHumid = document.createElement("p");
-            cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span>"+" "+ data.daily[0].humidity +"%";
+            cityHumid.innerHTML = "<span class='alert-dark p-2'>Humidity:</span>"+" "+ data.daily[0].humidity +"%";
             var cityUvi = document.createElement("span");
             cityUvi.innerHTML = "UVI Index: <tag id='uv-index'>"+data.daily[0].uvi;"+</tag>"
             cityUvi.style.color = "white" 
@@ -74,7 +75,6 @@ var getDailyWeather = function(lat, lon){
             currentStatsEl.append(cityDate, cityIconToday, cityTemp, cityWind, cityHumid, cityUvi);
 
                 //change color in UVI index
-            var uvIndexTagEl = document.querySelector("#uv-index");
             var uvIndex = data.daily[0].uvi
             if(uvIndex < 2.9){
                 cityUvi.style.backgroundColor = "#639045"
@@ -98,14 +98,14 @@ var getDailyWeather = function(lat, lon){
                 var dayCard = document.createElement("div")
                     //5 coming days
                 var cityDate = document.createElement("p");
-                cityDate.className = "badge bg-dark";
+                cityDate.className = "badge bg-dark fs-5";
                 cityDate.innerText = dyDate;
                 var cityTemp = document.createElement("p");
-                cityTemp.innerHTML = "<span class='alert-dark'>Temprature:</span>"+" "+ data.daily[i].temp.day +"°C";
+                cityTemp.innerHTML = "<span class='alert-dark'>Temprature:</span></br>"+" "+ data.daily[i].temp.day +"°C";
                 var cityWind = document.createElement("p");
-                cityWind.innerHTML = "<span class='alert-dark'>Wind Speed:</span>"+" "+ data.daily[i].wind_speed +" Km/h";
+                cityWind.innerHTML = "<span class='alert-dark'>Wind Speed:</span></br>"+" "+ data.daily[i].wind_speed +" Km/h";
                 var cityHumid = document.createElement("p");
-                cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span>"+" "+ data.daily[i].humidity +"%";
+                cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span></br>git add"+" "+ data.daily[i].humidity +"%";
 
                     // display the weather coniditions and icon
                 var cityCondition = data.daily[i].weather[0].main
@@ -163,7 +163,7 @@ var saveCity = function(name){
     }
 
     var cityButton = document.createElement("button");
-    cityButton.className = "cityBtn bg-info d-block";
+    cityButton.className = "width-100 btn btn-warning mb-2";
     cityButton.innerHTML = name;
     cityButton.addEventListener("click", function (){
         getWeatherInfo(name)
