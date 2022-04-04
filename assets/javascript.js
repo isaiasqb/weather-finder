@@ -64,6 +64,8 @@ var getDailyWeather = function(lat, lon){
             cityUvi.innerHTML = "UVI Index: <tag id='uv-index'>"+data.daily[0].uvi;"+</tag>"
             cityUvi.style.color = "white" 
 
+            fiveDayTitleEl.innerText = "5-Day Forecast"
+
                 // display the weather ocnditions icon for the day
             var cityConditionToday = data.daily[0].weather[0].main
             var cityIconToday = document.createElement("img")
