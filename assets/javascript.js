@@ -105,7 +105,7 @@ var getDailyWeather = function(lat, lon){
                 var cityWind = document.createElement("p");
                 cityWind.innerHTML = "<span class='alert-dark'>Wind Speed:</span></br>"+" "+ data.daily[i].wind_speed +" Km/h";
                 var cityHumid = document.createElement("p");
-                cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span></br>git add"+" "+ data.daily[i].humidity +"%";
+                cityHumid.innerHTML = "<span class='alert-dark'>Humidity:</span></br>"+" "+ data.daily[i].humidity +"%";
 
                     // display the weather coniditions and icon
                 var cityCondition = data.daily[i].weather[0].main
